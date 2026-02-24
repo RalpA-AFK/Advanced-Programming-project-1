@@ -1,12 +1,27 @@
 public class Levenshtein {
-    public static int Levenshtein(String word1,String word2){
+    public static int LevenshteinDistance(String word1,String word2) {
         int[][] dp = new int[word1.length() + 1][word2.length() + 1];
-        for(int i = 0; i <= word1.length();i++){
+        for (int i = 0; i <= word1.length(); i++) {
             dp[i][0] = i; // cost of the letter deletion on word1
         }
-        for(int j = 0; j <= word2.length(); j++){
+        for (int j = 0; j <= word2.length(); j++) {
             dp[0][j] = j; // cost of inserting letters to word1 to match word2
         }
+        for (int i = 1; i <= word1.length(); i++) {
+            for (int j = 1; j <= word2.length(); j++) {
+                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1]; // letters mach no edit done
+                } else {
+                    dp[i][j] = 1 + Math.min(
+                            dp[i - 1][j - 1], //substitution
+                            Math.min(
+                                    dp[i - 1][j],    // deletion
+                                    dp[i][j - 1]     // insertion
+                            ));
 
+                }
+            }
+        }
+        return dp[word1.length()][word2.length()];
     }
 }
